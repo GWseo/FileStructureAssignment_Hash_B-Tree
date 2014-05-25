@@ -4,6 +4,8 @@
  *  Name        : Gyuwon Seo
  *  Date        : 12/5/14
  *  Object      : make hashTable & dat File for input data
+ *  repo        : https://github.com/GWseo/FileStructureAssignment_Hash_B-Tree/blob/master/Assignment1.cpp
+ *  
  */
 
 /*
@@ -109,7 +111,7 @@ typedef struct{
 
 typedef struct{
     btreeNodeHeader header;
-    btreeData Data[MAXNODEDATA];
+    btreeData Data[MAXNODEDATA+1];
 }btreeNode;
 
 typedef struct{
@@ -123,6 +125,7 @@ typedef struct {
     btreeLeafHeader header;
     btreeData Data[MAXLEAFDATA];
     unsigned nextLeafNum;
+    float Dummy;
 }btreeLeaf;
 
 using namespace std;
@@ -855,12 +858,14 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
     float sc = score;
     int i = 0;
     unsigned elementC;
-    unsigned currentDepth;
+    unsigned currentDepth, currentNodeN;
+    
     btreeData* Data;
     elementC = currentNode->header.elementCount;
     currentDepth = currentNode->header.depth;
     Data=currentNode->Data;
-
+    currentNodeN = currentNode->header.nodeNum;
+    
     for ( i = 0 ; i < elementC; i++ ){
         if(Data->score >= score){
            Data++; 
@@ -871,7 +876,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                     //branchNode
                     spliteNode(blockNumber,score,currentD);
                 }
-                if(currentNodeNum != currentNode->header.nodeNum){
+                if(currentNodeN != currentNode->header.nodeNum){
                     nodeWrite(currentNode->header.nodeNum, currentNode);
                     free(currentNode);
                     currentNode = (btreeNode*)nodeRead(Data->blockNumber);
@@ -907,49 +912,81 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
 //check depth 
 //
 unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
-    
-    unsigned leftNodeNum, rightNodeNum, parentNodeNum;
+    int i; 
+    float cmpScore = currentNode->Data[LEFTNODEMOVESIZE].score;
+    unsigned leftNodeNum, rightNodeNum, parentNodeNum, tempNextNodeNum;
     btreeLeaf *newLeftLeaf,*newRightLeaf;
     btreeNode *newParentNode,*newLeftNode,*newRightNode;
     btreeLeafHeader tempLeafHeader = {0,0,0,-1};
     btreeNodeHeader tempNodeHeader = {0,0,0,-1}; 
-    btreeData tempNewNodeData, tempCurrentNodeData;
+    btreeData tempNewNodeData, *tempCurrentNodeData, tempNextNodeData={0xFFFFFFFF,0};
 
-    //when leaf split
-    if(currentD == maxDepth){
-        parentNodeNum = currentNode->header.parentNum;
-         
-        if(parentNodeNum == 0xFFFFFFFF){
-           maxDepth++; 
-           newParentNode = (btreeNode*)malloc(sizeof(btreeNode));
-           tempNodeHeader.elementCount=1;
-           tempNodeHeader.depth = 0;
-           tempNodeHeader.nodeNum = currentNodeCount+1;
-           tempNodeHeader.parentNum = -1;
-           memcpy(newParentNode,&tempNodeHeader,sizeof(btreeNodeHeader));
-            //insert middle of currentData;
+    parentNodeNum = currentNode->header.parentNum;
+    leftNodeNum = currentNode->header.nodeNum;     
 
-            memcpy(newParentNode->Data,
-                    currentNode->Data+LEFTNODEMOVESIZE-1,
-                    sizeof(btreeData));
+    if(parentNodeNum == 0xFFFFFFFF){
+       maxDepth++; 
+       newParentNode = (btreeNode*)malloc(sizeof(btreeNode));
+
+       tempNodeHeader.elementCount=1;
+       tempNodeHeader.nodeNum = currentNodeCount+1;
+
+       memcpy(newParentNode,&tempNodeHeader,sizeof(btreeNodeHeader));
+        //insert middle of currentData;
+       tempNewNodeData.score=((currentNode->Data)+LEFTNODEMOVESIZE-1)->score; 
+       tempNewNodeData.blockNumber= currentNode->header.nodeNum;
+        memcpy(newParentNode->Data,
+                &tempNewNodeData,
+                sizeof(btreeData));
+        tempNextNodeData.blockNumber = tempNodeHeader.nodeNum+1;
+        memcpy(newParentNode->Data,
+                &tempNextNodeData,
+                sizeof(btreeData));
+    //TODO : update depth for all node
+    
+    }
+    else{
+        newParentNode = (btreeNode*)nodeRead(parentNodeNum);
+        //check elementCount;
+        currentNode = newParentNode;
+        currentNodeNum = newParentNode->header.nodeNum;
+
+        if(newParentNode->header.elementCount >= MAXNODEDATA){
+            spliteNode(blockNumber, score, currentD-1); 
         }
-        else{
+        if(currentNodeNum != parentNodeNum){
+            nodeWrite(currentNodeNum,currentNode);
+            free(newParentNode);
             newParentNode = (btreeNode*)nodeRead(parentNodeNum);
-            //check elementCount;
-            
-            memcpy(newParentNode->Data+newParentNode->header.elementCount,
-                    currentNode+LEFTNODEMOVESIZE-1,
-                    sizeof(btreeData));
-            newParentNode->header.elementCount++;
+            currentNode = newParentNode;
+            currentNodeNum = newParentNode->header.nodeNum;
+        } 
+        tempCurrentNodeData = newParentNode->Data;
+        for(i = 0 ; i < newParentNode->header.elementCount+1; i++ ){
+            if(tempCurrentNodeData->score > cmpScore) break;
+            tempCurrentNodeData++; 
+        } 
+        
+        memcpy(newParentNode->Data+newParentNode->header.elementCount,
+                currentNode+LEFTNODEMOVESIZE-1,
+                sizeof(btreeData));
+        newParentNode->header.elementCount++;
 
-        }
+    }
 
+    nodeWrite(newParentNode->header.nodeNum , newParentNode);
+    parentNodeNum = tempNodeHeader.nodeNum;
+    free(newParentNode);
+
+//when leaf split
+    if(currentD == maxDepth){
         //make new next Node    
         newRightLeaf = (btreeLeaf*)malloc(sizeof(btreeLeaf));
         memset(newRightLeaf,0x00,sizeof(btreeLeaf));
         memcpy(newRightLeaf->Data,currentNode->Data+LEFTNODEMOVESIZE, sizeof(btreeData)*RIGHTNODEMOVESIZE);
         tempLeafHeader.elementCount = LEFTNODEMOVESIZE;
         tempLeafHeader.leafNum = currentNode->header.nodeNum;
+        newRightLeaf->nextLeafNum =  
              
         //write to the file (leftleaf)
         
