@@ -1,3 +1,5 @@
+git add --all
+
 git commit -m "asdfasdfasdf"
 
 git push origin master
