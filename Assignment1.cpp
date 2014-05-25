@@ -912,7 +912,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
 //check depth 
 //
 unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
-    int i; 
+    int i=0; 
     float cmpScore = currentNode->Data[LEFTNODEMOVESIZE].score;
     unsigned leftNodeNum, rightNodeNum, parentNodeNum, tempNextNodeNum;
     btreeLeaf *newLeftLeaf,*newRightLeaf;
@@ -925,7 +925,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
     leftNodeNum = currentNode->header.nodeNum;     
 
     if(parentNodeNum == 0xFFFFFFFF){
-       maxDepth++; 
        newParentNode = (btreeNode*)malloc(sizeof(btreeNode));
 
        tempNodeHeader.elementCount=1;
@@ -966,39 +965,52 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
             if(tempCurrentNodeData->score > cmpScore) break;
             tempCurrentNodeData++; 
         } 
-        
+        memmove(tempCurrentNodeData+1,tempCurrentNodeData,sizeof(btreeData)*(MAXNODEDATA-i+1) );       
         memcpy(newParentNode->Data+newParentNode->header.elementCount,
                 currentNode+LEFTNODEMOVESIZE-1,
                 sizeof(btreeData));
+        tempCurrentNodeData->score=cmpScore;
         newParentNode->header.elementCount++;
 
     }
 
     nodeWrite(newParentNode->header.nodeNum , newParentNode);
-    parentNodeNum = tempNodeHeader.nodeNum;
-    free(newParentNode);
+    parentNodeNum = newParentNode->header.nodeNum;
 
 //when leaf split
     if(currentD == maxDepth){
-        //make new next Node    
+        //make new next(right) Node    
+        if(parentNodeNum == 0xFFFFFFFF) 
+           maxDepth++; 
+        newLeftLeaf = (btreeLeaf*)nodeRead(leftNodeNum);
         newRightLeaf = (btreeLeaf*)malloc(sizeof(btreeLeaf));
         memset(newRightLeaf,0x00,sizeof(btreeLeaf));
-        memcpy(newRightLeaf->Data,currentNode->Data+LEFTNODEMOVESIZE, sizeof(btreeData)*RIGHTNODEMOVESIZE);
-        tempLeafHeader.elementCount = LEFTNODEMOVESIZE;
-        tempLeafHeader.leafNum = currentNode->header.nodeNum;
-        newRightLeaf->nextLeafNum =  
-             
-        //write to the file (leftleaf)
         
+        memcpy(newRightLeaf->Data,newLeftLeaf->Data+LEFTNODEMOVESIZE, sizeof(btreeData)*RIGHTNODEMOVESIZE);
+        //get next leaf node number from parent
+        newRightLeaf->nextLeafNum = ((newParentNode->Data)+i)->blockNumber;
+
+        tempLeafHeader.elementCount = RIGHTNODEMOVESIZE;
+        tempLeafHeader.leafNum =currentBlockCount+1;
+        tempLeafHeader.depth = maxDepth;
+        memcpy(&newRightLeaf->header,&tempLeafHeader,sizeof(btreeLeafHeader));
+
+        //write to the file (leftleaf)
+        nodeWrite(currentNodeCount+1,newRightLeaf);
+
+        //modify leftleaf
+        memset(newLeftLeaf->Data+LEFTNODEMOVESIZE,0x00,sizeof(btreeData)*RIGHTNODEMOVESIZE);
+        newLeftLeaf->nextLeafNum =newRightLeaf->header.leafNum;
+        newLeftLeaf->header.elementCount=LEFTNODEMOVESIZE;
+        newLeftLeaf->header.depth=maxDepth; 
+        nodeWrite(newLeftLeaf->header.leafNum,newLeftLeaf);
+        free(newRightLeaf);
+        free(newLeftLeaf);
     }
-    else{   //when node split
-    
-
-
-
-
+    else{   //when node splite
 
     }
+    free(newParentNode);
 }
 
 void nodeWrite(unsigned nodeNumber ,void* Node ){
