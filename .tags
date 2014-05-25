@@ -1,0 +1,39 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+BLOCKSIZE	Assignment1.cpp	13;"	d	file:
+BlockNum	Assignment1.cpp	/^  unsigned BlockNum;$/;"	m	struct:__anon2	file:
+Data	Assignment1.cpp	/^}Data;$/;"	t	typeref:struct:__anon1	file:
+HashTableData	Assignment1.cpp	/^}HashTableData;$/;"	t	typeref:struct:__anon2	file:
+ID	Assignment1.cpp	/^  unsigned ID;$/;"	m	struct:__anon1	file:
+ID	Assignment1.cpp	/^  unsigned ID;$/;"	m	struct:__anon2	file:
+MAXBLOCKDATA	Assignment1.cpp	14;"	d	file:
+RJhash	Assignment1.cpp	/^unsigned RJhash( unsigned a)$/;"	f
+SaveInfo	Assignment1.cpp	/^} SaveInfo;$/;"	t	typeref:struct:__anon3	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon3	file:
+branchBlock	Assignment1.cpp	/^unsigned branchBlock(unsigned blockNumber){$/;"	f
+checkBlockNumber	Assignment1.cpp	/^bool checkBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
+checkInsert	Assignment1.cpp	/^unsigned checkInsert(unsigned blockNumber){$/;"	f
+currentBlockCount	Assignment1.cpp	/^unsigned currentBlockCount;$/;"	v
+datFile	Assignment1.cpp	/^FILE* datFile;$/;"	v
+deleteRecord	Assignment1.cpp	/^bool deleteRecord(unsigned ID){$/;"	f
+dept	Assignment1.cpp	/^  char dept[10];$/;"	m	struct:__anon1	file:
+hashBitCount	Assignment1.cpp	/^int hashBitCount=1;$/;"	v
+hashCount	Assignment1.cpp	/^unsigned hashCount;$/;"	v
+idxFile	Assignment1.cpp	/^FILE* idxFile;$/;"	v
+infoVector	Assignment1.cpp	/^vector<SaveInfo> infoVector;$/;"	v
+insertBlockNumber	Assignment1.cpp	/^void insertBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
+insertData	Assignment1.cpp	/^bool insertData(unsigned blockNumber, Data D){$/;"	f
+insertHash	Assignment1.cpp	/^unsigned insertHash(char* name, unsigned ID, float score, char* dept){$/;"	f
+insertRecord	Assignment1.cpp	/^unsigned insertRecord(char* name, unsigned ID, float score, char* dept){$/;"	f
+main	Assignment1.cpp	/^int main()$/;"	f
+mask	Assignment1.cpp	/^unsigned mask = 0xFFFFFFFF;$/;"	v
+name	Assignment1.cpp	/^  char name[20];$/;"	m	struct:__anon1	file:
+openDB	Assignment1.cpp	/^bool openDB(char* filename){$/;"	f
+score	Assignment1.cpp	/^  float score;$/;"	m	struct:__anon1	file:
+searchID	Assignment1.cpp	/^unsigned searchID(unsigned ID){$/;"	f
+searchScore	Assignment1.cpp	/^unsigned searchScore(float lower, float upper){$/;"	f
+studentId	Assignment1.cpp	/^    unsigned studentId;$/;"	m	struct:__anon3	file:
