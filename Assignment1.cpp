@@ -42,6 +42,7 @@
 
 //#define DEBUG
 //#define DEBUGHIGH
+#define BTREEDEBUG
 #define CHECKTIME
 
 #define BLOCKSIZE 8192 
@@ -866,10 +867,15 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
     Data=currentNode->Data;
     currentNodeN = currentNode->header.nodeNum;
     
-    for ( i = 0 ; i < elementC; i++ ){
-        if(Data->score >= score){
+#ifdef BTREEDEBUG
+
+    printf("blockNumber : %u, score: %f, currentD: %u, currentNode: %u\n",blockNumber,score,currentD, currentNode->header.nodeNum);
+#endif
+    for ( i = 0 ; i < elementC+1; i++ ){
+        if(Data->score !=0  && Data->score <= score ){
            Data++; 
-        }else if(Data->score < score){
+      //  }else if(Data->score < score){
+        }else{
             if(currentDepth == maxDepth){
                 btreeData tempD = {blockNumber,score};
                 if(MAXNODEDATA <= elementC){
@@ -898,8 +904,8 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                 }
                 insertNode(blockNumber,score,currentD++);
             }
-        }else{
-            printf("what the..?\n");
+       // }else{
+       //     printf("what the..?\n");
         }
     }
     //when need to move nextblock
@@ -920,10 +926,11 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
     btreeLeafHeader tempLeafHeader = {0,0,0,-1};
     btreeNodeHeader tempNodeHeader = {0,0,0,-1}; 
     btreeData tempNewNodeData, *tempCurrentNodeData, tempNextNodeData={0xFFFFFFFF,0};
-
     parentNodeNum = currentNode->header.parentNum;
     leftNodeNum = currentNode->header.nodeNum;     
 
+    nodeWrite(currentNode->header.nodeNum,currentNode);
+    free(currentNode);
     if(parentNodeNum == 0xFFFFFFFF){
        newParentNode = (btreeNode*)malloc(sizeof(btreeNode));
 
@@ -945,6 +952,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
     
     }
     else{
+        memset(newParentNode,0x00,sizeof(btreeNode));
         newParentNode = (btreeNode*)nodeRead(parentNodeNum);
         //check elementCount;
         currentNode = newParentNode;
@@ -956,6 +964,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         if(currentNodeNum != parentNodeNum){
             nodeWrite(currentNodeNum,currentNode);
             free(newParentNode);
+            free(currentNode);
             newParentNode = (btreeNode*)nodeRead(parentNodeNum);
             currentNode = newParentNode;
             currentNodeNum = newParentNode->header.nodeNum;
@@ -991,7 +1000,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         newRightLeaf->nextLeafNum = ((newParentNode->Data)+i)->blockNumber;
 
         tempLeafHeader.elementCount = RIGHTNODEMOVESIZE;
-        tempLeafHeader.leafNum =currentBlockCount+1;
+        tempLeafHeader.leafNum =currentNodeCount+1;
         tempLeafHeader.depth = maxDepth;
         memcpy(&newRightLeaf->header,&tempLeafHeader,sizeof(btreeLeafHeader));
 
@@ -1005,10 +1014,32 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         newLeftLeaf->header.depth=maxDepth; 
         nodeWrite(newLeftLeaf->header.leafNum,newLeftLeaf);
         free(newRightLeaf);
-        free(newLeftLeaf);
+        currentNode = (btreeNode*)newLeftLeaf;
     }
-    else{   //when node splite
+    else{   //when node split 
+        if(parentNodeNum == 0xFFFFFFFF){
+            maxDepth ++;
+            currentD++;
+        }
+        newLeftNode = (btreeNode*)nodeRead(leftNodeNum);
+        newRightNode = (btreeNode*)malloc(sizeof(btreeNode));
+        memset(newRightNode,0x00,sizeof(btreeNode));
 
+        memcpy(newRightNode->Data,newLeftNode->Data+LEFTNODEMOVESIZE, sizeof(btreeData)*RIGHTNODEMOVESIZE);
+
+        tempNodeHeader.elementCount = RIGHTNODEMOVESIZE;
+        tempNodeHeader.nodeNum = currentNodeCount+1;
+        tempNodeHeader.depth=currentD;
+        memcpy(&newRightNode->header,&tempNodeHeader, sizeof(btreeNodeHeader));
+
+        nodeWrite(currentNodeCount+1,newRightNode);
+        
+        memset(newLeftNode->Data+LEFTNODEMOVESIZE,0x00, sizeof(btreeData)*RIGHTNODEMOVESIZE);
+        newLeftNode->header.elementCount = LEFTNODEMOVESIZE;
+        newLeftNode->header.depth = currentD;
+        nodeWrite(newLeftNode->header.nodeNum,newLeftNode);
+        free(newRightNode);
+        currentNode = newLeftNode;
     }
     free(newParentNode);
 }
@@ -1017,12 +1048,13 @@ void nodeWrite(unsigned nodeNumber ,void* Node ){
     if(nodeNumber > currentNodeCount)currentNodeCount++;
 
     fseek(idxFile,nodeNumber*BLOCKSIZE,SEEK_SET);
-    fwrite(Node, sizeof(char),BLOCKSIZE,idxFile);
+    fwrite(Node, sizeof(btreeNode),1,idxFile);
 }
 void* nodeRead(unsigned nodeNumber){
     void* node;
     fseek(idxFile,nodeNumber * BLOCKSIZE, SEEK_SET);
     node = malloc(sizeof(BLOCKSIZE));
-    fread(node,sizeof(BLOCKSIZE),1,idxFile); 
+    memset(node,0x00,sizeof(BLOCKSIZE));
+    fread(node,sizeof(btreeNode),1,idxFile); 
     return node;
 }
