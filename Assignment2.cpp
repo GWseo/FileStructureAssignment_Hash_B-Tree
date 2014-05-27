@@ -112,7 +112,8 @@ typedef struct{
 
 typedef struct{
     btreeNodeHeader header;
-    btreeData Data[MAXNODEDATA+1];
+    btreeData Data[MAXNODEDATA];
+    btreeData dummy;
 }btreeNode;
 
 typedef struct{
@@ -304,8 +305,8 @@ int main(){
 
     
     // Input data
-    ifstream fin("Assignment2.inp", ios::in);
-  //  ifstream fin("input.in",ios::in);
+   // ifstream fin("Assignment2.inp", ios::in);
+    ifstream fin("input.in",ios::in);
     // for ESPA
     ofstream fout("Assignment2.out", ios::out);
     
@@ -890,7 +891,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
             tempData = *Data;
             if(currentDepth == maxDepth){
                 btreeData tempD = {blockNumber,score};
-                if(MAXNODEDATA <= elementC){
+                if(MAXNODEDATA-1 <= elementC){
                     //branchNode
                     spliteNode(blockNumber,score,currentD);
                 }
@@ -988,6 +989,11 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         memcpy(newParentNode->Data+1,
                 &tempNextNodeData,
                 sizeof(btreeData));
+        tempNextNodeData.score = 0xFFFFFFFF;
+        tempNextNodeData.blockNumber = 0xFFFFFFFF;
+        memcpy(newParentNode->Data+2,
+                &tempNextNodeData,
+                sizeof(btreeData));
        tempNextNodeNum = 0xFFFFFFFF; 
        //rootTree=newParentNode;
        rootTree = (btreeNode*)malloc(BLOCKSIZE);
@@ -1001,7 +1007,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         currentNode = newParentNode;
         parentNodeNum = currentNodeNum = newParentNode->header.nodeNum;
 
-        if(newParentNode->header.elementCount >= MAXNODEDATA){
+        if(newParentNode->header.elementCount >= MAXNODEDATA-1){
             spliteNode(blockNumber, score, currentD-1); 
         }
         if(currentNodeNum != parentNodeNum){
@@ -1024,7 +1030,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         tempNodeData.blockNumber=tempCurrentNodeData->blockNumber;
         tempNodeData.score = cmpScore;
         tempCurrentNodeData->blockNumber=currentNodeCount+1;
-        memmove(tempCurrentNodeData+1,tempCurrentNodeData,sizeof(btreeData)*(MAXNODEDATA-i+1) );       
+        memmove(tempCurrentNodeData+1,tempCurrentNodeData,sizeof(btreeData)*(MAXNODEDATA-i) );       
         memcpy(tempCurrentNodeData,
                 &tempNodeData,
                 sizeof(btreeData));
@@ -1038,7 +1044,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
 //when leaf split
     if(currentD == maxDepth){
         //make new next(right) Node    
-        if(isRoot && parentElementCount >= MAXNODEDATA) {
+        if(isRoot && parentElementCount >= MAXNODEDATA-1) {
            maxDepth++; 
         }
         newLeftLeaf = (btreeLeaf*)nodeRead(leftNodeNum);
@@ -1073,7 +1079,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         currentNodeNum = leftNodeNum;
     }
     else{   //when node split 
-        if(isRoot && parentElementCount >= MAXNODEDATA ){
+        if(isRoot && parentElementCount >= MAXNODEDATA-1 ){
             maxDepth ++;
             currentD++;
         }
@@ -1128,6 +1134,10 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
     loopRange = currentNode->header.elementCount;
     searchDepth = currentNode->header.depth;
     currentData = currentNode->Data;
+
+#ifdef BTREEDEBUG
+    printf("enter btreesearch : depthe: %u\n",searchDepth);
+#endif
     if(searchDepth == maxDepth){
         for(i = 0 ; i < loopRange; i++){
             if(currentData->score >= lower && currentData->score <= upper){
@@ -1140,9 +1150,12 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
             }
         } 
         if(i == loopRange && maxDepth != 0 ){
+            unsigned next = ((btreeLeaf*)currentNode)->nextLeafNum;
+            if(next == 0xFFFFFFFF)return tillFound;
             free(currentNode);
             currentNode = NULL;
-            currentNode=(btreeNode*)nodeRead(((btreeLeaf*)currentNode)->nextLeafNum);
+                printf("%u\n",next);
+            currentNode=(btreeNode*)nodeRead(next);
             tillFound = btreeSearch(lower,upper,tillFound);
         }
     }
