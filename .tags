@@ -4,36 +4,138 @@
 !_TAG_PROGRAM_NAME	Exuberant Ctags	//
 !_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
 !_TAG_PROGRAM_VERSION	5.9~svn20110310	//
-BLOCKSIZE	Assignment1.cpp	13;"	d	file:
-BlockNum	Assignment1.cpp	/^  unsigned BlockNum;$/;"	m	struct:__anon2	file:
+Attr	Assignment1.cpp	/^    BucketAttr Attr;$/;"	m	struct:__anon5	file:
+BLOCKSIZE	Assignment1.cpp	48;"	d	file:
+BTREEDEBUG	Assignment1.cpp	45;"	d	file:
+Bucket	Assignment1.cpp	/^}Bucket;$/;"	t	typeref:struct:__anon5	file:
+BucketAttr	Assignment1.cpp	/^}BucketAttr;$/;"	t	typeref:struct:__anon3	file:
+BucketData	Assignment1.cpp	/^}BucketData;$/;"	t	typeref:struct:__anon4	file:
+CHECKTIME	Assignment1.cpp	46;"	d	file:
+DEPTLEN	Assignment1.cpp	55;"	d	file:
+DEPTLEN	Assignment1.cpp	59;"	d	file:
+Data	Assignment1.cpp	/^    BucketData Data[MAXBUCKETDATA];$/;"	m	struct:__anon5	file:
+Data	Assignment1.cpp	/^    btreeData Data[MAXLEAFDATA];$/;"	m	struct:__anon11	file:
+Data	Assignment1.cpp	/^    btreeData Data[MAXNODEDATA+1];$/;"	m	struct:__anon9	file:
 Data	Assignment1.cpp	/^}Data;$/;"	t	typeref:struct:__anon1	file:
-HashTableData	Assignment1.cpp	/^}HashTableData;$/;"	t	typeref:struct:__anon2	file:
+DataHeader	Assignment1.cpp	/^}DataHeader;$/;"	t	typeref:struct:__anon2	file:
+Dummy	Assignment1.cpp	/^    float Dummy;$/;"	m	struct:__anon11	file:
 ID	Assignment1.cpp	/^  unsigned ID;$/;"	m	struct:__anon1	file:
-ID	Assignment1.cpp	/^  unsigned ID;$/;"	m	struct:__anon2	file:
-MAXBLOCKDATA	Assignment1.cpp	14;"	d	file:
-RJhash	Assignment1.cpp	/^unsigned RJhash( unsigned a)$/;"	f
-SaveInfo	Assignment1.cpp	/^} SaveInfo;$/;"	t	typeref:struct:__anon3	file:
-blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon3	file:
-branchBlock	Assignment1.cpp	/^unsigned branchBlock(unsigned blockNumber){$/;"	f
+LEFTNODEMOVESIZE	Assignment1.cpp	64;"	d	file:
+MAXBLOCKDATA	Assignment1.cpp	53;"	d	file:
+MAXBLOCKDATA	Assignment1.cpp	57;"	d	file:
+MAXBUCKETDATA	Assignment1.cpp	61;"	d	file:
+MAXLEAFDATA	Assignment1.cpp	63;"	d	file:
+MAXNODEDATA	Assignment1.cpp	62;"	d	file:
+NAMELEN	Assignment1.cpp	54;"	d	file:
+NAMELEN	Assignment1.cpp	58;"	d	file:
+RIGHTNODEMOVESIZE	Assignment1.cpp	65;"	d	file:
+RJhash	Assignment1.cpp	/^unsigned RJhash( unsigned source)$/;"	f
+SaveInfo	Assignment1.cpp	/^} SaveInfo;$/;"	t	typeref:struct:__anon12	file:
+SaveInfo	Assignment2.cpp	/^} SaveInfo;$/;"	t	typeref:struct:__anon13	file:
+a	test/headerwrite.c	/^    unsigned a;$/;"	m	struct:__anon14	file:
+b	test/headerwrite.c	/^    body b[100];$/;"	m	struct:__anon16	file:
+b	test/headerwrite.c	/^    unsigned b;$/;"	m	struct:__anon14	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon12	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon2	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon4	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon6	file:
+blockNumber	Assignment1.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon7	file:
+blockNumber	Assignment2.cpp	/^    unsigned blockNumber;$/;"	m	struct:__anon13	file:
+body	test/headerwrite.c	/^}body;$/;"	t	typeref:struct:__anon15	file:
+branchBlock	Assignment1.cpp	/^unsigned branchBlock(unsigned blockNumber, unsigned hashValue){$/;"	f
+branchBucket	Assignment1.cpp	/^unsigned branchBucket(unsigned hI){$/;"	f
+btreeData	Assignment1.cpp	/^}btreeData;$/;"	t	typeref:struct:__anon7	file:
+btreeLeaf	Assignment1.cpp	/^}btreeLeaf;$/;"	t	typeref:struct:__anon11	file:
+btreeLeafHeader	Assignment1.cpp	/^}btreeLeafHeader;$/;"	t	typeref:struct:__anon10	file:
+btreeNode	Assignment1.cpp	/^}btreeNode;$/;"	t	typeref:struct:__anon9	file:
+btreeNodeHeader	Assignment1.cpp	/^}btreeNodeHeader;$/;"	t	typeref:struct:__anon8	file:
+bucket	Assignment1.cpp	/^    Bucket* bucket;$/;"	m	struct:__anon6	file:
+c	test/headerwrite.c	/^    unsigned c;$/;"	m	struct:__anon14	file:
 checkBlockNumber	Assignment1.cpp	/^bool checkBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
-checkInsert	Assignment1.cpp	/^unsigned checkInsert(unsigned blockNumber){$/;"	f
+checkBlockNumber	Assignment2.cpp	/^bool checkBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
+checkInsert	Assignment1.cpp	/^int checkInsert(unsigned blockNumber){$/;"	f
+currentBlock	Assignment1.cpp	/^unsigned char currentBlock[BLOCKSIZE];$/;"	v
 currentBlockCount	Assignment1.cpp	/^unsigned currentBlockCount;$/;"	v
+currentBlockNum	Assignment1.cpp	/^unsigned currentBlockNum;$/;"	v
+currentBucket	Assignment1.cpp	/^Bucket* currentBucket;$/;"	v
+currentBucketCount	Assignment1.cpp	/^unsigned currentBucketCount;$/;"	v
+currentBucketNum	Assignment1.cpp	/^unsigned currentBucketNum;$/;"	v
+currentNode	Assignment1.cpp	/^btreeNode *currentNode;$/;"	v
+currentNodeCount	Assignment1.cpp	/^unsigned currentNodeCount;$/;"	v
+currentNodeNum	Assignment1.cpp	/^unsigned currentNodeNum;$/;"	v
+d	test/headerwrite.c	/^    unsigned d;$/;"	m	struct:__anon14	file:
 datFile	Assignment1.cpp	/^FILE* datFile;$/;"	v
 deleteRecord	Assignment1.cpp	/^bool deleteRecord(unsigned ID){$/;"	f
-dept	Assignment1.cpp	/^  char dept[10];$/;"	m	struct:__anon1	file:
-hashBitCount	Assignment1.cpp	/^int hashBitCount=1;$/;"	v
-hashCount	Assignment1.cpp	/^unsigned hashCount;$/;"	v
+deleteRecord	Assignment2.cpp	/^bool deleteRecord(unsigned ID){$/;"	f
+dept	Assignment1.cpp	/^  char dept[DEPTLEN];$/;"	m	struct:__anon1	file:
+dept	input.py	/^dept = "fdsafds"$/;"	v
+depth	Assignment1.cpp	/^    unsigned depth;$/;"	m	struct:__anon10	file:
+depth	Assignment1.cpp	/^    unsigned depth;$/;"	m	struct:__anon8	file:
+elementCount	Assignment1.cpp	/^    unsigned elementCount;$/;"	m	struct:__anon10	file:
+elementCount	Assignment1.cpp	/^    unsigned elementCount;$/;"	m	struct:__anon2	file:
+elementCount	Assignment1.cpp	/^    unsigned elementCount;$/;"	m	struct:__anon3	file:
+elementCount	Assignment1.cpp	/^    unsigned elementCount;$/;"	m	struct:__anon8	file:
+f	input.py	/^f = file("input.in","w+")$/;"	v
+findBlockNumFromBucket	Assignment1.cpp	/^unsigned findBlockNumFromBucket(Bucket* B,unsigned hashValue){$/;"	f
+getBlockNumFromHash	Assignment1.cpp	/^unsigned getBlockNumFromHash(unsigned hashValue){$/;"	f
+getHashIndex	Assignment1.cpp	/^unsigned getHashIndex(unsigned hV){$/;"	f
+h	test/headerwrite.c	/^    header h;$/;"	m	struct:__anon16	file:
+hashPrefix	Assignment1.cpp	/^int hashPrefix=0;$/;"	v
+hashTable	Assignment1.cpp	/^Bucket** hashTable;$/;"	v
+hashTableData	Assignment1.cpp	/^}hashTableData;$/;"	t	typeref:struct:__anon6	file:
+hashValue	Assignment1.cpp	/^    unsigned hashValue;$/;"	m	struct:__anon4	file:
+header	Assignment1.cpp	/^    btreeLeafHeader header;$/;"	m	struct:__anon11	file:
+header	Assignment1.cpp	/^    btreeNodeHeader header;$/;"	m	struct:__anon9	file:
+header	test/headerwrite.c	/^}header;$/;"	t	typeref:struct:__anon14	file:
+id	input.py	/^id = 201420011$/;"	v
 idxFile	Assignment1.cpp	/^FILE* idxFile;$/;"	v
 infoVector	Assignment1.cpp	/^vector<SaveInfo> infoVector;$/;"	v
+infoVector	Assignment2.cpp	/^vector<SaveInfo> infoVector;$/;"	v
+initDataBase	Assignment1.cpp	/^int initDataBase(){$/;"	f
 insertBlockNumber	Assignment1.cpp	/^void insertBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
-insertData	Assignment1.cpp	/^bool insertData(unsigned blockNumber, Data D){$/;"	f
+insertBlockNumber	Assignment2.cpp	/^void insertBlockNumber(unsigned blockNumber, unsigned studentId){$/;"	f
+insertBucket	Assignment1.cpp	/^unsigned insertBucket(unsigned blockNumber,unsigned hashValue){$/;"	f
+insertData	Assignment1.cpp	/^unsigned insertData(Data D,unsigned hashValue){$/;"	f
 insertHash	Assignment1.cpp	/^unsigned insertHash(char* name, unsigned ID, float score, char* dept){$/;"	f
+insertNode	Assignment1.cpp	/^unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){$/;"	f
 insertRecord	Assignment1.cpp	/^unsigned insertRecord(char* name, unsigned ID, float score, char* dept){$/;"	f
-main	Assignment1.cpp	/^int main()$/;"	f
-mask	Assignment1.cpp	/^unsigned mask = 0xFFFFFFFF;$/;"	v
-name	Assignment1.cpp	/^  char name[20];$/;"	m	struct:__anon1	file:
-openDB	Assignment1.cpp	/^bool openDB(char* filename){$/;"	f
+insertRecord	Assignment2.cpp	/^unsigned insertRecord(char* name, unsigned ID, float score, char* dept){$/;"	f
+leafNum	Assignment1.cpp	/^    unsigned leafNum;$/;"	m	struct:__anon10	file:
+main	Assignment1.cpp	/^int main(){$/;"	f
+main	Assignment2.cpp	/^int main()$/;"	f
+main	test/headerwrite.c	/^int main(){$/;"	f
+main	test/null.c	/^int main(){$/;"	f
+maxDepth	Assignment1.cpp	/^unsigned maxDepth;$/;"	v
+maxIdx	Assignment1.cpp	/^    unsigned maxIdx;$/;"	m	struct:__anon3	file:
+minIdx	Assignment1.cpp	/^    unsigned minIdx;$/;"	m	struct:__anon3	file:
+name	Assignment1.cpp	/^  char name[NAMELEN];$/;"	m	struct:__anon1	file:
+name	input.py	/^name = "asdf asda"$/;"	v
+newBucket	Assignment1.cpp	/^hashTableData* newBucket(Bucket* B){$/;"	f
+nextLeafNum	Assignment1.cpp	/^    unsigned nextLeafNum;$/;"	m	struct:__anon11	file:
+node	test/headerwrite.c	/^}node;$/;"	t	typeref:struct:__anon16	file:
+nodeNum	Assignment1.cpp	/^    unsigned nodeNum;$/;"	m	struct:__anon8	file:
+nodeRead	Assignment1.cpp	/^void* nodeRead(unsigned nodeNumber){$/;"	f
+nodeWrite	Assignment1.cpp	/^void nodeWrite(unsigned nodeNumber ,void* Node ){$/;"	f
+openDB	Assignment1.cpp	/^bool openDB(const char* filename){$/;"	f
+openDB	Assignment2.cpp	/^bool openDB(char* filename){$/;"	f
+outputTest	Assignment1.cpp	/^void outputTest(){$/;"	f
+p	test/headerwrite.c	/^    unsigned p;$/;"	m	struct:__anon15	file:
+packingBucket	Assignment1.cpp	/^void packingBucket(BucketData* Data){$/;"	f
+parentNum	Assignment1.cpp	/^    unsigned parentNum;$/;"	m	struct:__anon10	file:
+parentNum	Assignment1.cpp	/^    unsigned parentNum;$/;"	m	struct:__anon8	file:
+q	test/headerwrite.c	/^    unsigned q;$/;"	m	struct:__anon15	file:
+referenceCount	Assignment1.cpp	/^    unsigned referenceCount;$/;"	m	struct:__anon3	file:
+rootTree	Assignment1.cpp	/^btreeNode *rootTree;$/;"	v
+score	Assignment1.cpp	/^    float score;$/;"	m	struct:__anon7	file:
 score	Assignment1.cpp	/^  float score;$/;"	m	struct:__anon1	file:
+score	input.py	/^    score=score+0.0001$/;"	v
+score	input.py	/^score = 1.000$/;"	v
 searchID	Assignment1.cpp	/^unsigned searchID(unsigned ID){$/;"	f
+searchID	Assignment2.cpp	/^unsigned searchID(unsigned ID){$/;"	f
 searchScore	Assignment1.cpp	/^unsigned searchScore(float lower, float upper){$/;"	f
-studentId	Assignment1.cpp	/^    unsigned studentId;$/;"	m	struct:__anon3	file:
+searchScore	Assignment2.cpp	/^unsigned searchScore(float lower, float upper){$/;"	f
+spliteNode	Assignment1.cpp	/^unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){$/;"	f
+st	input.py	/^    st = "i %s %d %f %s\\n"%(name,id+i,score,dept)$/;"	v
+studentId	Assignment1.cpp	/^    unsigned studentId;$/;"	m	struct:__anon12	file:
+studentId	Assignment2.cpp	/^    unsigned studentId;$/;"	m	struct:__anon13	file:
+swapBucket	Assignment1.cpp	/^Bucket* swapBucket(unsigned from, unsigned to ){$/;"	f
