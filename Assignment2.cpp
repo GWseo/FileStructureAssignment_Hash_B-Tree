@@ -43,7 +43,7 @@
 //#define DEBUG
 //#define DEBUGHIGH
 //#define BTREEDEBUG
-#define CHECKTIME
+//#define CHECKTIME
 
 #define BLOCKSIZE 8192 
 
@@ -221,6 +221,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD);
 unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD);
 void nodeWrite(unsigned, void*);
 void* nodeRead(unsigned);
+unsigned btreeSearch(float from,float to, unsigned till);
 
 
 /*
@@ -281,7 +282,10 @@ unsigned searchID(unsigned ID){
 unsigned searchScore(float lower, float upper){
          unsigned numOfScore = 0;
          // add code here
-         
+         currentNode = (btreeNode*)malloc(BLOCKSIZE);
+         memcpy(currentNode,rootTree,BLOCKSIZE);
+         numOfScore = btreeSearch(lower,upper,0); 
+
          return numOfScore;
 }
 // =========================Your code here down!!(Encdcdd)=========================
@@ -300,10 +304,10 @@ int main(){
 
     
     // Input data
-  //  ifstream fin("Assignment1.inp", ios::in);
-    ifstream fin("input.in",ios::in);
+    ifstream fin("Assignment2.inp", ios::in);
+  //  ifstream fin("input.in",ios::in);
     // for ESPA
-    ofstream fout("Assignment1.out", ios::out);
+    ofstream fout("Assignment2.out", ios::out);
     
     while(!fin.eof()){
     
@@ -1115,4 +1119,50 @@ void* nodeRead(unsigned nodeNumber){
     memset(node,0x00,BLOCKSIZE);
     fread(node,BLOCKSIZE,1,idxFile); 
     return node;
+}
+unsigned btreeSearch(float lower,float upper, unsigned till){
+    int i = 0;
+    unsigned tillFound = till;
+    unsigned searchDepth ,loopRange;
+    btreeData* currentData;
+    loopRange = currentNode->header.elementCount;
+    searchDepth = currentNode->header.depth;
+    currentData = currentNode->Data;
+    if(searchDepth == maxDepth){
+        for(i = 0 ; i < loopRange; i++){
+            if(currentData->score >= lower && currentData->score <= upper){
+                tillFound++;
+                currentData++;
+            }else if(currentData->score < lower){
+                currentData++;
+            }else{
+                break;
+            }
+        } 
+        if(i == loopRange && maxDepth != 0 ){
+            free(currentNode);
+            currentNode = NULL;
+            currentNode=(btreeNode*)nodeRead(((btreeLeaf*)currentNode)->nextLeafNum);
+            tillFound = btreeSearch(lower,upper,tillFound);
+        }
+    }
+    else{
+        for(i = 0; i < loopRange; i++){
+            if(currentData->score >= lower){
+                free(currentNode);
+                currentNode=NULL;
+                currentNode = (btreeNode*)nodeRead(currentData->blockNumber);
+                tillFound = btreeSearch(lower,upper,tillFound);
+                break;
+            }
+            else if(currentData->score < lower){
+                currentData++; 
+            }
+        } 
+    
+    }
+#ifdef  BTREEDEBUG
+    printf("lower : %f, upper : %f, till : %u, currentNode :%u\n",lower,upper,tillFound,currentNode->header.nodeNum);
+#endif
+    return tillFound;
 }
