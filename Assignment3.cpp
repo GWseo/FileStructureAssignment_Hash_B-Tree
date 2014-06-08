@@ -2,7 +2,7 @@
  *  FileStrucutre DBMS Assignment
  *  Student ID  : 200924472
  *  Name        : Gyuwon Seo
- *  Date        : 12/5/30
+ *  Date        : 12/6/9
  *  Object      : make hashTable & dat File for input data
  *  repo        : https://github.com/GWseo/FileStructureAssignment_Hash_B-Tree/blob/master/Assignment1.cpp
  *  
@@ -140,7 +140,6 @@ FILE* hashFile;
 FILE* idxFile;
 FILE* datFile;
 
-//hashTableData* hashTable;
 Bucket** hashTable;
 Bucket* currentBucket;
 int hashPrefix=0;
@@ -854,7 +853,6 @@ unsigned insertRecord(char* name, unsigned ID, float score, char* dept){
 #endif
 //insert btreeNode
 
-        //currentNode = rootTree;
         memset(currentNode,0x00,BLOCKSIZE);
         free(currentNode);
         currentNode = (btreeNode*)malloc(BLOCKSIZE);
@@ -888,10 +886,8 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
     currentNodeN = currentNode->header.nodeNum;
     parentNum = currentNode->header.parentNum;
     for ( i = 0 ; i < elementC+1; i++ ){
-       // if(Data->score !=0  && Data->score <= sc ){
         if( Data->score <= sc ){
            Data++; 
-      //  }else if(Data->score < score){
         }else{
             tempData = *Data;
             if(currentDepth == maxDepth){
@@ -942,12 +938,9 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                 insertNode(blockNumber,sc,currentD+1);
                 break;
             }
-       // }else{
-       //     printf("what the..?\n");
         }
     }
     //when need to move nextblock
-    //
     if(i >= elementC+1){
         if(currentDepth == maxDepth){
             unsigned nextNode = ((btreeLeaf*)currentNode)->nextLeafNum;
@@ -1042,7 +1035,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         }
         if(currentNodeNum != parentNodeNum){
             nodeWrite(currentNodeNum,currentNode);
-            //free(newParentNode);
             if(currentNode != NULL){
                 memset(currentNode,0x00,BLOCKSIZE);
                 free(currentNode);
@@ -1055,7 +1047,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         } 
         tempCurrentNodeData = newParentNode->Data;
         for(i = 0 ; i < newParentNode->header.elementCount+1; i++ ){
-           // if((tempCurrentNodeData->score > cmpScore) && (tempCurrentNodeData->score != 0xFFFFFFFF)) break;
             if((tempCurrentNodeData->score > cmpScore) ) break;
             tempCurrentNodeData++; 
         } 
@@ -1080,12 +1071,10 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         }
         newLeftLeaf = (btreeLeaf*)nodeRead(leftNodeNum);
         newRightLeaf = (btreeLeaf*)malloc(BLOCKSIZE);
-     //   memset(newRightLeaf,0x00,BLOCKSIZE);
         memset(newRightLeaf,0xFF,BLOCKSIZE);
 
         
         memcpy(newRightLeaf->Data,newLeftLeaf->Data+LEFTNODEMOVESIZE, sizeof(btreeData)*RIGHTNODEMOVESIZE);
-       // memset(newLeftLeaf->Data+LEFTNODEMOVESIZE,0x00,sizeof(btreeData)*RIGHTNODEMOVESIZE);
         memset(newLeftLeaf->Data+LEFTNODEMOVESIZE,0xFF,sizeof(btreeData)*RIGHTNODEMOVESIZE);
         //get next leaf node number from parent
         newRightLeaf->nextLeafNum = tempNextNodeNum;
@@ -1100,9 +1089,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         nodeWrite(currentNodeCount+1,newRightLeaf);
 
         //modify leftleaf
-        //memset(newLeftLeaf->Data+LEFTNODEMOVESIZE,0x00,sizeof(btreeData)*RIGHTNODEMOVESIZE);
-       // memset(newLeftLeaf->Data+LEFTNODEMOVESIZE,0xFF,sizeof(btreeData)*RIGHTNODEMOVESIZE);
-
         newLeftLeaf->nextLeafNum =newRightLeaf->header.leafNum;
         newLeftLeaf->header.elementCount=LEFTNODEMOVESIZE;
         newLeftLeaf->header.depth=maxDepth; 
@@ -1110,8 +1096,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         nodeWrite(newLeftLeaf->header.leafNum,newLeftLeaf);
         free(newRightLeaf);
         currentNode = (btreeNode*)newLeftLeaf;
-        //memcpy(currentNode,newLeftLeaf,BLOCKSIZE);
-    //    free(newLeftLeaf);
         currentNodeNum = leftNodeNum;
     }
     else{   //when node split 
@@ -1121,7 +1105,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         }
         newLeftNode = (btreeNode*)nodeRead(leftNodeNum);
         newRightNode = (btreeNode*)malloc(sizeof(btreeNode));
-      //  memset(newRightNode,0x00,sizeof(btreeNode));
         memset(newRightNode,0xFF,sizeof(btreeNode));
 
         memcpy(newRightNode->Data,newLeftNode->Data+LEFTNODEMOVESIZE+1, sizeof(btreeData)*RIGHTNODEMOVESIZE);
@@ -1134,8 +1117,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
 
         nodeWrite(currentNodeCount+1,newRightNode);
         
-        //memset(newLeftNode->Data+LEFTNODEMOVESIZE+1,0x00, sizeof(btreeData)*RIGHTNODEMOVESIZE);
-        
         memset(newLeftNode->Data+LEFTNODEMOVESIZE+1,0xFF, sizeof(btreeData)*RIGHTNODEMOVESIZE);
 
         newLeftNode->header.elementCount = LEFTNODEMOVESIZE;
@@ -1145,7 +1126,6 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         free(newRightNode);
         currentNode = newLeftNode;
         currentNodeNum = newLeftLeaf->header.leafNum;
-//        free(newLeftNode);
     }
     free(newParentNode);
 
@@ -1196,7 +1176,6 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
             if(next == 0xFFFFFFFF || next == currentNode->header.nodeNum)return tillFound;
             free(currentNode);
             currentNode = NULL;
-//                printf("%u\n",next);
             currentNode=(btreeNode*)nodeRead(next);
             tillFound = btreeSearch(lower,upper,tillFound);
         }
