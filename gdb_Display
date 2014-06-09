@@ -1,0 +1,14 @@
+b 643
+b 729
+b 753
+r
+display hashTable[0]@10
+display tempHashTable[0]@10
+display currentBucket->Attr
+display currentBucket->Data[0]@10
+display b_Branch->Data[0]@10
+display b_New->Data[0]@10
+display b_Attr
+display new_Attr
+display currentBucketCount
+display currentBucketNum
