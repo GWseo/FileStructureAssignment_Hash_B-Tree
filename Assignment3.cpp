@@ -264,12 +264,10 @@ void outputTest();
 
 
 // Delete record 
-bool deleteRecord(unsigned ID){
-        // add code here
-        
-        return false;
-}
-
+bool deleteRecord(unsigned ID);
+bool deleteHashData(unsigned ID,BucketData* D);
+float deleteBlockData(BucketData* D);
+bool deleteNodeData(float score);
 
 // Search by ID
 unsigned searchID(unsigned ID){
@@ -309,7 +307,7 @@ int main(){
     
     // Input data
    // ifstream fin("Assignment3.inp", ios::in);
-    ifstream fin("sample2/1.inp",ios::in);
+    ifstream fin("Assignment3.inp",ios::in);
     // for ESPA
     ofstream fout("Assignment3.out", ios::out);
     
@@ -848,7 +846,7 @@ Bucket* swapBucket(unsigned from, unsigned to ){
         fwrite(currentBucket, sizeof(Bucket),1,hashFile);
         currentBucketNum=to2hashTable;
         fseek(hashFile, to2hashTable* BLOCKSIZE ,SEEK_SET);
-        memset(currentBlock,0x00,BLOCKSIZE);
+        memset(currentBucket,0x00,BLOCKSIZE);
         fread(currentBucket,sizeof(Bucket),1,hashFile);
 
     }
@@ -1266,4 +1264,63 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
     printf("lower : %f, upper : %f, till : %u, currentNode :%u\n",lower,upper,tillFound,currentNode->header.nodeNum);
 #endif
     return tillFound;
+}
+/*
+ * 1. delete Block Data
+ * 2. delete hash Table Data 
+ * 3. delete b+tree Data
+ */
+bool deleteRecord(unsigned ID){
+    // add code here 
+    bool result = false;
+    float score = 0.0;
+    BucketData * Data;
+    unsigned HashValue = RJhash(ID);
+    result = deleteHashData(HashValue,Data);
+    if(result){
+        score = deleteBlockData(Data );
+        deleteNodeData(score);
+    }
+    return result;
+}
+bool deleteHashData(unsigned HashValue, BucketData* D){
+    float result = false;
+    int loopCount=0;
+    BucketData * tempData;
+    unsigned hashIdx = getHashIndex(HashValue);
+    swapBucket(currentBucketNum,hashIdx);
+    tempData = currentBucket->Data;    
+    while(tempData->hashValue != HashValue){
+        loopCount++;
+        tempData++;
+    }
+    if(loopCount < currentBucket->Attr.elementCount){
+        result = true;
+        memset(tempData,0x00,sizeof(BucketData));
+        packingBucket(currentBucket->Data);
+        printf("delete found\n");
+        D = tempData;
+    }
+    else{
+        printf("not found\n");
+        D=NULL;
+    }
+    
+    return result;
+}
+float deleteBlockData(BucketData *D){
+    unsigned blockN;
+    unsigned hashV;
+    blockN = D->blockNumber;
+    hashV = D->hashValue; 
+    
+    //swap Block and delelte then restore
+    //
+
+}
+bool deleteNodeData(float sc){
+    //goto leafnode and delete
+    //if node contain none then migrate:
+
+
 }
