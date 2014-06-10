@@ -267,7 +267,7 @@ void outputTest();
 bool deleteRecord(unsigned ID);
 bool deleteHashData(unsigned ID,BucketData* D);
 float deleteBlockData(BucketData* D);
-bool deleteNodeData(float score);
+float deleteNodeData(float score);
 
 // Search by ID
 unsigned searchID(unsigned ID){
@@ -1274,10 +1274,23 @@ bool deleteRecord(unsigned ID){
     // add code here 
     bool result = false;
     float score = 0.0;
-    BucketData * Data;
+    BucketData * Data=NULL;
     unsigned HashValue = RJhash(ID);
+
+    Data=(BucketData*)malloc(sizeof(BucketData));
+    memset(Data,0x00,sizeof(BucketData));
+
     result = deleteHashData(HashValue,Data);
     if(result){
+        //swap Node to root
+        if(currentNode != NULL){
+            nodeWrite(currentNode->header.nodeNum,currentNode);
+            memset(currentNode,0x00,BLOCKSIZE);
+        } 
+        memcpy(currentNode,rootTree,BLOCKSIZE);
+        currentNodeNum = rootTree->header.nodeNum;
+
+        //start to search
         score = deleteBlockData(Data );
         deleteNodeData(score);
     }
@@ -1290,37 +1303,131 @@ bool deleteHashData(unsigned HashValue, BucketData* D){
     unsigned hashIdx = getHashIndex(HashValue);
     swapBucket(currentBucketNum,hashIdx);
     tempData = currentBucket->Data;    
+    //get hash idx find Data
+
     while(tempData->hashValue != HashValue){
         loopCount++;
         tempData++;
     }
+
+    // if found, get block# and erase data.
     if(loopCount < currentBucket->Attr.elementCount){
         result = true;
         memset(tempData,0x00,sizeof(BucketData));
         packingBucket(currentBucket->Data);
         printf("delete found\n");
-        D = tempData;
+        memcpy(D,  tempData,sizeof(BucketData));
     }
     else{
         printf("not found\n");
+        free(D);
         D=NULL;
     }
     
     return result;
 }
 float deleteBlockData(BucketData *D){
+    int i;
+    unsigned *idxPtr;
     unsigned blockN;
     unsigned hashV;
+    float score=0.0;
+    Data tempD;
+
     blockN = D->blockNumber;
     hashV = D->hashValue; 
     
     //swap Block and delelte then restore
-    //
-
+    fseek(datFile,currentBlockNum * BLOCKSIZE, SEEK_SET);
+    fwrite(currentBlock, sizeof(char),BLOCKSIZE,datFile);
+    memset(currentBlock,0x00,BLOCKSIZE);
+    fseek(datFile,blockN * BLOCKSIZE, SEEK_SET);
+    fread(currentBlock, sizeof(char),BLOCKSIZE,datFile);
+    
+    
+    //check and erase
+    idxPtr = ((unsigned*)currentBlock)+2; 
+    for(i=0; i < MAXBLOCKDATA ; i++,idxPtr++){
+        if(*idxPtr == hashV) {
+           *idxPtr=0xFFFFFFFF;
+           memcpy(&tempD, currentBlock+BLOCKSIZE-(i)*sizeof(Data),sizeof(Data));
+           memset(currentBlock+BLOCKSIZE-(i)*sizeof(Data),0x00,sizeof(Data));
+           break;
+        }
+    }
+    //swap back
+    fseek(datFile,blockN * BLOCKSIZE, SEEK_SET);
+    fwrite(currentBlock, sizeof(char),BLOCKSIZE,datFile);
+    memset(currentBlock, 0x00,BLOCKSIZE);
+    fseek(datFile,currentBlockNum * BLOCKSIZE, SEEK_SET);
+    fwrite(currentBlock, sizeof(char),BLOCKSIZE,datFile);
+    
+    return tempD.score;
 }
-bool deleteNodeData(float sc){
+
+float deleteNodeData(float sc){
     //goto leafnode and delete
-    //if node contain none then migrate:
+    //if node contain no element then migrate
+    float score = sc;
+    float result = -1.0;
+    int i = 0 ;
+    unsigned elementC, currentDepth, currentNodeN, parentNum;
+    btreeData* Data,tempData;
+    
+    
+    elementC = currentNode->header.elementCount;
+    currentDepth = currentNode->header.depth;
+    Data = currentNode->Data;
+    currentNodeN = currentNode->header.nodeNum;
+    parentNum = currentNode->header.parentNum;
 
+    //from root , goto certain score 
+    for ( i = 0 ; i < elementC+1; i++ ){
+        if (Data->score < score){
+            Data++;
+        }
+        else{
+            tempData = *Data;
+           if(currentDepth == maxDepth){
+                //delete score and packing 
+                if ( i == elementC ){
+                   result = (Data-1)->score;
+                }
+                else{
+                   memmove(Data,Data+1,sizeof(btreeData)*(elementC-i-1));  
+                }
+               currentNode->header.elementCount-=1;
+               memset(currentNode->Data+elementC,0xFF,sizeof(btreeData));
+               nodeWrite(currentNode->header.nodeNum, currentNode);
+               break;
+           } 
+           else{
+                nodeWrite(currentNode->header.nodeNum,currentNode);
+                if(currentNode != NULL){
+                    memset(currentNode,0x00,BLOCKSIZE);
+                    free(currentNode);
+                }
+                currentNode = NULL;
+                currentNode = (btreeNode*)nodeRead(tempData.blockNumber);
+                currentNodeNum = (currentNode)->header.nodeNum;
+                result = deleteNodeData(score);
+                break;
+           }
+        
+        }
+    
+    } 
+    if (currentNodeN != currentNode->header.nodeNum){
+        nodeWrite(currentNode->header.nodeNum,currentNode);
+        memset(currentNode,0x00,BLOCKSIZE);
+        free(currentNode);
+        currentNode =(btreeNode*) nodeRead(currentNodeN); 
+    }
 
+    if(result != -1.0){
+         (currentNode->Data+i)->score= result;
+    }
+    // if score is last position it might be need to check parent node    
+        
+    return result;
 }
