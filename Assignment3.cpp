@@ -306,8 +306,8 @@ int main(){
 
     
     // Input data
-    ifstream fin("sample3/1.inp", ios::in);
-//    ifstream fin("Assignment3.inp",ios::in);
+    ifstream fin("sample3/2.inp", ios::in);
+ //   ifstream fin("Assignment3.inp",ios::in);
     // for ESPA
     ofstream fout("Assignment3.out", ios::out);
     
@@ -693,6 +693,7 @@ unsigned branchBucket(unsigned hI){
 
 
     free(hashTable);
+    hashTable = NULL;
  
     b_New = (Bucket*)malloc(sizeof(Bucket)); 
     memset(b_New, 0x00, sizeof(Bucket));
@@ -914,6 +915,7 @@ unsigned insertRecord(char* name, unsigned ID, float score, char* dept){
 
         memset(currentNode,0x00,BLOCKSIZE);
         free(currentNode);
+        currentNode = NULL;
         currentNode = (btreeNode*)malloc(BLOCKSIZE);
         memcpy(currentNode,rootTree,BLOCKSIZE);
         currentNodeNum = rootTree->header.nodeNum;
@@ -958,6 +960,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                         nodeWrite(currentNode->header.nodeNum, currentNode);
                         memset(currentNode,0x00,BLOCKSIZE);
                         free(currentNode);
+                        currentNode = NULL;
                     }
                     currentNode = (btreeNode*)nodeRead(rootTree->header.nodeNum);
                     currentNodeNum = rootTree->header.nodeNum;
@@ -1007,6 +1010,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
             if(currentNode != NULL){
                 memset(currentNode,0x00,BLOCKSIZE);
                 free(currentNode);
+                currentNode = NULL;
             }
             currentNode = (btreeNode*)nodeRead(nextNode);
             currentNodeNum = nextNode;
@@ -1255,6 +1259,7 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
         if (i == loopRange){
             memset(currentNode,0x00,BLOCKSIZE);
             free(currentNode);
+            currentNode = NULL;
             currentNode = (btreeNode*)nodeRead(currentData->blockNumber);
             tillFound=btreeSearch(lower,upper,tillFound);
         }
@@ -1360,7 +1365,7 @@ float deleteBlockData(BucketData *D){
     fwrite(currentBlock, sizeof(char),BLOCKSIZE,datFile);
     memset(currentBlock, 0x00,BLOCKSIZE);
     fseek(datFile,currentBlockNum * BLOCKSIZE, SEEK_SET);
-    fwrite(currentBlock, sizeof(char),BLOCKSIZE,datFile);
+    fread(currentBlock, sizeof(char),BLOCKSIZE,datFile);
     
     return tempD.score;
 }
@@ -1394,10 +1399,10 @@ float deleteNodeData(float sc){
                    result = (Data-1)->score;
                 }
                 else{
-                   memmove(Data,Data+1,sizeof(btreeData)*(elementC-i-1));  
+                   memmove(Data,Data+1,sizeof(btreeData)*(elementC-i));  
                 }
                currentNode->header.elementCount-=1;
-               memset(currentNode->Data+elementC,0xFF,sizeof(btreeData));
+               memset(currentNode->Data+elementC-1,0xFF,sizeof(btreeData));
                nodeWrite(currentNode->header.nodeNum, currentNode);
                break;
            } 
@@ -1423,7 +1428,9 @@ float deleteNodeData(float sc){
         free(currentNode);
         currentNode =(btreeNode*) nodeRead(currentNodeN); 
     }
-
+    if( currentNode->header.nodeNum == rootTree->header.nodeNum ){
+        memcpy(rootTree,currentNode,BLOCKSIZE); 
+    }
     if(result != -1.0){
          (currentNode->Data+i)->score= result;
     }

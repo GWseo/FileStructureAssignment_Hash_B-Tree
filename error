@@ -1,0 +1,198 @@
+ error
+*** glibc detected *** /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3: double free or corruption (!prev): 0x08ed3460 ***
+======= Backtrace: =========
+/lib/i386-linux-gnu/libc.so.6(+0x721a2)[0xb74d91a2]
+/lib/i386-linux-gnu/libc.so.6(+0x72e42)[0xb74d9e42]
+/lib/i386-linux-gnu/libc.so.6(cfree+0x6d)[0xb74dcf2d]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x804b5b6]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x804abc4]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x804adce]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x804aa56]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x80495ff]
+/lib/i386-linux-gnu/libc.so.6(__libc_start_main+0xf3)[0xb7480113]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3[0x80490a1]
+======= Memory map: ========
+08048000-0804e000 r-xp 00000000 08:01 2233598 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3
+0804e000-0804f000 r--p 00005000 08:01 2233598 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3
+0804f000-08050000 rw-p 00006000 08:01 2233598 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment3
+08050000-08052000 rw-p 00000000 00:00 0
+08ecf000-08ef0000 rw-p 00000000 00:00 0 [heap]
+b7300000-b7321000 rw-p 00000000 00:00 0
+b7321000-b7400000 ---p 00000000 00:00 0
+b743b000-b743d000 rw-p 00000000 00:00 0
+b743d000-b7465000 r-xp 00000000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7465000-b7466000 r--p 00028000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7466000-b7467000 rw-p 00029000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7467000-b75e3000 r-xp 00000000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b75e3000-b75e5000 r--p 0017c000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b75e5000-b75e6000 rw-p 0017e000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b75e6000-b75ea000 rw-p 00000000 00:00 0
+b75ea000-b7606000 r-xp 00000000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7606000-b7607000 r--p 0001b000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7607000-b7608000 rw-p 0001c000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7608000-b76e6000 r-xp 00000000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b76e6000-b76e7000 ---p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b76e7000-b76eb000 r--p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b76eb000-b76ec000 rw-p 000e2000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b76ec000-b76f3000 rw-p 00000000 00:00 0
+b7700000-b7705000 rw-p 00000000 00:00 0
+b7705000-b7706000 r-xp 00000000 00:00 0 [vdso]
+b7706000-b7724000 r-xp 00000000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b7724000-b7725000 r--p 0001d000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b7725000-b7726000 rw-p 0001e000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+bff75000-bff96000 rw-p 00000000 00:00 0 [stack]
+	
+
+0
+
+2
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+3
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+4
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+5
+	
+
+success
+	
+
+0.003
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+6
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+7
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+8
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+9
+	
+
+success
+	
+
+0.002
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+10
+	
+
+success
+	
+
+0
+	
+
+Incorrect : your answer is incorrect
+	
+
+0
+
+이전 총점
+	
+
+ 0
+
+현재 총점
+	
+
+ 0
+
+이전총걸린시간
+	
+
+ 0.02
+
+총걸린시간
+	
+
+ 0.017
+
+점수 업데이트 정보
+	
+
+ 이전점수와 같습니다. 이전 점수기록으로 유지됩니다.
+  이번 총시간이 작습니다. 이번시간으로 기록됩니다.
