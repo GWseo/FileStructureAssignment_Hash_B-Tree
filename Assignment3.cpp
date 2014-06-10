@@ -306,8 +306,8 @@ int main(){
 
     
     // Input data
-   // ifstream fin("Assignment3.inp", ios::in);
-    ifstream fin("Assignment3.inp",ios::in);
+    ifstream fin("sample3/1.inp", ios::in);
+//    ifstream fin("Assignment3.inp",ios::in);
     // for ESPA
     ofstream fout("Assignment3.out", ios::out);
     
@@ -574,7 +574,7 @@ unsigned getBlockNumFromHash(unsigned hashValue){
 
     blockNumber = findBlockNumFromBucket(B,hashValue);
     if(blockNumber == 0xFFFFFFFF){
-        printf("ERROR!! blocknumbr = -1!\n");
+       // printf("ERROR!! blocknumbr = -1!\n");
     }
     return blockNumber;
 }
@@ -851,7 +851,7 @@ Bucket* swapBucket(unsigned from, unsigned to ){
 
     }
     else{
-        printf("new bucket\n");
+        //printf("new bucket\n");
         /*
         fseek(hashFile,from*BLOCKSIZE,SEEK_SET);
         fwrite(currentBucket, sizeof(Bucket),1,hashFile);
@@ -905,7 +905,7 @@ unsigned insertRecord(char* name, unsigned ID, float score, char* dept){
 #endif
     //insert Hash
         if( (blockNumber = insertHash(name, ID, score, dept))==-1){
-            printf("Error!!\n");
+           // printf("Error!!\n");
         }
 #ifdef DEBUGHIGH
         printf("insert Record --- return b#: %u, currentBucket:%p \n",blockNumber,currentBucket);
@@ -1315,11 +1315,11 @@ bool deleteHashData(unsigned HashValue, BucketData* D){
         result = true;
         memset(tempData,0x00,sizeof(BucketData));
         packingBucket(currentBucket->Data);
-        printf("delete found\n");
+       // printf("delete found\n");
         memcpy(D,  tempData,sizeof(BucketData));
     }
     else{
-        printf("not found\n");
+        //printf("not found\n");
         free(D);
         D=NULL;
     }
