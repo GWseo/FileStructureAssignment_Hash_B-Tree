@@ -308,8 +308,8 @@ int main(){
 
     
     // Input data
-  //  ifstream fin("Assignment2.inp", ios::in);
-    ifstream fin("sample2/1.inp",ios::in);
+    ifstream fin("Assignment2.inp", ios::in);
+  //  ifstream fin("sample2/1.inp",ios::in);
     // for ESPA
     ofstream fout("Assignment2.out", ios::out);
     

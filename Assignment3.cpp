@@ -138,9 +138,8 @@ using namespace std;
 FILE* hashFile;
 FILE* idxFile;
 FILE* datFile;
-
+//Dynamic Hash
 hashTableData* hashTable;
-//Bucket** hashTable;
 Bucket* currentBucket;
 int hashPrefix=0;
 unsigned currentBucketNum;
@@ -151,7 +150,7 @@ btreeNode *currentNode;
 unsigned maxDepth;
 unsigned currentNodeNum;
 unsigned currentNodeCount;
-
+//Data Block
 unsigned char currentBlock[BLOCKSIZE];
 unsigned currentBlockNum;
 unsigned currentBlockCount;
@@ -412,7 +411,6 @@ int initDataBase(){
     printf("initDataBase -- \n");
 #endif
     hashTable = (hashTableData*)malloc(sizeof(hashTableData*));
-//    hashTable = (Bucket**)malloc(sizeof(Bucket*));
     memset(hashTable,0x00,sizeof(Bucket*));
    
     b_New = (Bucket*)malloc(sizeof(Bucket)); 
@@ -420,7 +418,6 @@ int initDataBase(){
     b_NewAttr = (BucketAttr*)b_New;
     b_NewAttr->referenceCount++;
     hashTable[0].BucketNumber=0; 
-   // hashTable[0]=b_New;
 
     currentBucket = (Bucket*)b_New;
     currentBucketNum=0;
@@ -554,7 +551,6 @@ unsigned findBlockNumFromBucket(Bucket* B,unsigned hashValue){
 #endif
     for(i = 0 ; i < MAXBUCKETDATA ; i++){
         if (cBucket[i].hashValue == hV){
-//            printf("find Block Num From Bucket ---  return\n");
             return cBucket[i].blockNumber;
         }
     }
@@ -569,7 +565,6 @@ unsigned getBlockNumFromHash(unsigned hashValue){
 #endif
     // read hash table from memory(RAM!!) not to try file I/O 
     // No need to do File I/O
-//    B = hashTable[DynamicHashIdx];
     B = swapBucket(currentBucketNum,DynamicHashIdx);
 
     blockNumber = findBlockNumFromBucket(B,hashValue);
@@ -581,7 +576,6 @@ unsigned getBlockNumFromHash(unsigned hashValue){
 unsigned insertBucket(unsigned blockNumber,unsigned hashValue){
     unsigned hV = hashValue;
     unsigned hashIdx = getHashIndex(hV);
-//    Bucket* B = hashTable[hashIdx];
     Bucket* B = swapBucket(currentBucketNum,hashIdx);
     BucketAttr* Attr = (BucketAttr*)B;
     BucketData* Data = (BucketData*)B+2;
@@ -624,7 +618,6 @@ unsigned branchBucket(unsigned hI){
     unsigned maxhashIdx,minhashIdx;
     int referenceCount=0;
     hashTableData* tempHashTable;
-//    Bucket** tempHashTable;
     Bucket* b_New;
     Bucket* b_Branch; 
     BucketAttr b_Attr, new_Attr;
@@ -639,32 +632,25 @@ unsigned branchBucket(unsigned hI){
      */ 
     isTableSizeChange=hashTableSize = 1<<hashPrefix; //need to chekc reference count of Bucket
     tempHashTable = hashTable;
-//    if(((BucketAttr*)hashTable[hI])->referenceCount == 1){
     if(((BucketAttr*)swapBucket(currentBucketNum,hI))->referenceCount ==1){
         for (i = 0 ; i < hashTableSize ; i ++){
-//            ((BucketAttr*)tempHashTable[i])->referenceCount=0;
            ((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount=0;
         }
         hashPrefix++; 
         hashTableSize = 1<<hashPrefix; //need to check reference count of Bucket
         tempHashTable = (hashTableData*)malloc(sizeof(hashTableData*)*hashTableSize);
         memset(tempHashTable,0x00,sizeof(hashTableData)*hashTableSize);
-//        tempHashTable = (Bucket**)malloc(sizeof(hashTableData*)*hashTableSize);
         for (i = 0 ; i < hashTableSize ; i ++){
             memcpy(tempHashTable+i, hashTable+i/2, sizeof(hashTableData));
-//            ((BucketAttr*)tempHashTable[i])->referenceCount=0;
-        //    ((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount=0;
         }
     
     }
     else{
         for (i = 0 ; i < hashTableSize ; i ++){
-//            ((BucketAttr*)tempHashTable[i])->referenceCount=0;
            ((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount=0;
         }
         tempHashTable = (hashTableData*)malloc(sizeof(hashTableData*)*hashTableSize);
         memset(tempHashTable,0x00,sizeof(hashTableData)*hashTableSize);
-//        tempHashTable = (Bucket**)malloc(sizeof(Bucket*)*hashTableSize);
         memcpy(tempHashTable,hashTable,sizeof(hashTableData*)*hashTableSize);
     }
 
@@ -706,7 +692,6 @@ unsigned branchBucket(unsigned hI){
     printf("debug2\n");
 #endif 
     
-//    b_Branch = tempHashTable[hashIdx]; 
     BucketElementCount = b_Attr.elementCount; 
     maxhashIdx = hashIdx; 
     minhashIdx = hashIdx;
@@ -726,12 +711,7 @@ unsigned branchBucket(unsigned hI){
         if(tempHashIndex < minhashIdx) minhashIdx = tempHashIndex;
     }
     // packing up bucket
-#ifdef DEBUG
-    printf("debug3\n");
-#endif
     packingBucket(b_Data);    
-
-    
 
     /*******apply attribute change*********/
     new_Attr.minIdx=hashIdx+1;
@@ -746,23 +726,15 @@ unsigned branchBucket(unsigned hI){
     
     // need to check duplicated
     for(i = hashIdx + 1 ; i < maxhashIdx+1 ; i++) {
-//        tempHashTable[i]=b_New;
-//        tempHashTable[i].BucketNumber=swapBucket(b_New)->Attr.;
         tempHashTable[i].BucketNumber = currentBucketCount-1;
     }
     hashTable = (hashTableData*)malloc(sizeof(hashTableData*)*hashTableSize);
-//    hashTable = (Bucket**)malloc(sizeof(Bucket*)*hashTableSize);
     memcpy(hashTable,tempHashTable,sizeof(hashTableData*)*hashTableSize);
 
     for ( i =0 ; i< hashTableSize ; i++ ){
-//        ((BucketAttr*)tempHashTable[i])->referenceCount++;
         ((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount++;
     }
     for (i = maxhashIdx+1; i < hashTableSize; i++){
-//        ((BucketAttr*)tempHashTable[i])->minIdx=i;
-//        i= ((BucketAttr*)tempHashTable[i])->maxIdx=i+((BucketAttr*)tempHashTable[i])->referenceCount-1;
-       // ((BucketAttr*)swapBucket(currentBucketNum,i))->minIdx=i;
-       // i= ((BucketAttr*)swapBucket(currentBucketNum,i))->maxIdx = i+((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount-1;
         swapBucket(currentBucketNum,i);
         currentBucket->Attr.minIdx=i;
         i= currentBucket->Attr.maxIdx = i + (currentBucket)->Attr.referenceCount-1;
@@ -806,7 +778,6 @@ void packingBucket(BucketData* Data){
                     else{
                         memset(tempD+movestartIndex,0x00,sizeof(BucketData)*movesize);
                     }
-                   // memmove(tempD+emptyIndex,tempD+movestartIndex,sizeof(BucketData)*movesize);
                     break;
                 }
             }
@@ -831,18 +802,7 @@ Bucket* swapBucket(unsigned from, unsigned to ){
         fwrite(currentBucket, sizeof(Bucket),1,hashFile);
 
     }
-/*
-    if((to<=maxIdx) && (minIdx<=to) ){
-        fseek(hashFile,from*BLOCKSIZE,SEEK_SET);
-        fwrite(currentBucket, sizeof(Bucket),1,hashFile);
- //       printf("currentBucket\n");
-        return currentBucket;
-    }
-    */
-  //  else if(to2hashTable < currentBucketCount){
-  
     else if(to2hashTable < currentBucketCount+1){
-    //    printf("exist bucket\n");
         fseek(hashFile,from*BLOCKSIZE,SEEK_SET);
         fwrite(currentBucket, sizeof(Bucket),1,hashFile);
         currentBucketNum=to2hashTable;
@@ -850,20 +810,6 @@ Bucket* swapBucket(unsigned from, unsigned to ){
         memset(currentBucket,0x00,BLOCKSIZE);
         fread(currentBucket,sizeof(Bucket),1,hashFile);
 
-    }
-    else{
-        //printf("new bucket\n");
-        /*
-        fseek(hashFile,from*BLOCKSIZE,SEEK_SET);
-        fwrite(currentBucket, sizeof(Bucket),1,hashFile);
-        currentBucketNum=to;
-        free(currentBucket);
-        currentBucket = NULL;
-        currentBucket = (Bucket*)malloc(sizeof(Bucket));
-        memset(currentBucket,0x00,sizeof(Bucket));
-
-        currentBucketCount++;
-        */
     }
     return currentBucket;
 
@@ -931,7 +877,6 @@ void outputTest(){
     elementCount = t[0];
     for (i = 0 ; i < elementCount; i++){
         memcpy(&temp,currentBlock+BLOCKSIZE-i*sizeof(Data),sizeof(Data));
-       // printf("index : %d, name : %s, id:%u, sc : %f, dep:%s\n",i,temp.name,temp.ID,temp.score,temp.dept);
     }
 }
 //search from root
