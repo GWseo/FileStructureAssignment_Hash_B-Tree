@@ -196,3 +196,96 @@ Incorrect : your answer is incorrect
 
  이전점수와 같습니다. 이전 점수기록으로 유지됩니다.
   이번 총시간이 작습니다. 이번시간으로 기록됩니다.
+
+
+
+  error
+*** glibc detected *** /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2: double free or corruption (!prev): 0x09b317f8 ***
+======= Backtrace: =========
+/lib/i386-linux-gnu/libc.so.6(+0x721a2)[0xb75651a2]
+/lib/i386-linux-gnu/libc.so.6(+0x72e42)[0xb7565e42]
+/lib/i386-linux-gnu/libc.so.6(cfree+0x6d)[0xb7568f2d]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804b522]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804ab30]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804ad3a]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804a9c2]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x8049639]
+/lib/i386-linux-gnu/libc.so.6(__libc_start_main+0xf3)[0xb750c113]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x80490d1]
+======= Memory map: ========
+08048000-0804e000 r-xp 00000000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+0804e000-0804f000 r--p 00005000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+0804f000-08050000 rw-p 00006000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+08050000-08052000 rw-p 00000000 00:00 0
+09b25000-09b46000 rw-p 00000000 00:00 0 [heap]
+b7300000-b7321000 rw-p 00000000 00:00 0
+b7321000-b7400000 ---p 00000000 00:00 0
+b74c7000-b74c9000 rw-p 00000000 00:00 0
+b74c9000-b74f1000 r-xp 00000000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b74f1000-b74f2000 r--p 00028000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b74f2000-b74f3000 rw-p 00029000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b74f3000-b766f000 r-xp 00000000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b766f000-b7671000 r--p 0017c000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b7671000-b7672000 rw-p 0017e000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b7672000-b7676000 rw-p 00000000 00:00 0
+b7676000-b7692000 r-xp 00000000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7692000-b7693000 r--p 0001b000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7693000-b7694000 rw-p 0001c000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b7694000-b7772000 r-xp 00000000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b7772000-b7773000 ---p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b7773000-b7777000 r--p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b7777000-b7778000 rw-p 000e2000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b7778000-b777f000 rw-p 00000000 00:00 0
+b778d000-b7791000 rw-p 00000000 00:00 0
+b7791000-b7792000 r-xp 00000000 00:00 0 [vdso]
+b7792000-b77b0000 r-xp 00000000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b77b0000-b77b1000 r--p 0001d000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b77b1000-b77b2000 rw-p 0001e000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+bff6c000-bff8d000 rw-p 00000000 00:00 0 [stack] 
+
+
+ error
+*** glibc detected *** /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2: double free or corruption (!prev): 0x09b757f8 ***
+======= Backtrace: =========
+/lib/i386-linux-gnu/libc.so.6(+0x721a2)[0xb75ab1a2]
+/lib/i386-linux-gnu/libc.so.6(+0x72e42)[0xb75abe42]
+/lib/i386-linux-gnu/libc.so.6(cfree+0x6d)[0xb75aef2d]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804b522]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804ab30]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804ad3a]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x804a9c2]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x8049639]
+/lib/i386-linux-gnu/libc.so.6(__libc_start_main+0xf3)[0xb7552113]
+/home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2[0x80490d1]
+======= Memory map: ========
+08048000-0804e000 r-xp 00000000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+0804e000-0804f000 r--p 00005000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+0804f000-08050000 rw-p 00006000 08:01 2233593 /home/stem/public_html/2014FS/espaCGI/work/200924472/Assignment2
+08050000-08052000 rw-p 00000000 00:00 0
+09b69000-09b8a000 rw-p 00000000 00:00 0 [heap]
+b7400000-b7421000 rw-p 00000000 00:00 0
+b7421000-b7500000 ---p 00000000 00:00 0
+b750d000-b750f000 rw-p 00000000 00:00 0
+b750f000-b7537000 r-xp 00000000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7537000-b7538000 r--p 00028000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7538000-b7539000 rw-p 00029000 08:01 8257959 /lib/i386-linux-gnu/libm-2.13.so
+b7539000-b76b5000 r-xp 00000000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b76b5000-b76b7000 r--p 0017c000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b76b7000-b76b8000 rw-p 0017e000 08:01 8257941 /lib/i386-linux-gnu/libc-2.13.so
+b76b8000-b76bc000 rw-p 00000000 00:00 0
+b76bc000-b76d8000 r-xp 00000000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b76d8000-b76d9000 r--p 0001b000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b76d9000-b76da000 rw-p 0001c000 08:01 8257939 /lib/i386-linux-gnu/libgcc_s.so.1
+b76da000-b77b8000 r-xp 00000000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b77b8000-b77b9000 ---p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b77b9000-b77bd000 r--p 000de000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b77bd000-b77be000 rw-p 000e2000 08:01 20709420 /usr/lib/i386-linux-gnu/libstdc++.so.6.0.16
+b77be000-b77c5000 rw-p 00000000 00:00 0
+b77d3000-b77d7000 rw-p 00000000 00:00 0
+b77d7000-b77d8000 r-xp 00000000 00:00 0 [vdso]
+b77d8000-b77f6000 r-xp 00000000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b77f6000-b77f7000 r--p 0001d000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+b77f7000-b77f8000 rw-p 0001e000 08:01 8257960 /lib/i386-linux-gnu/ld-2.13.so
+bf9f7000-bfa18000 rw-p 00000000 00:00 0 [stack]
+	
+

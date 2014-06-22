@@ -12,3 +12,5 @@ display b_Attr
 display new_Attr
 display currentBucketCount
 display currentBucketNum
+display tempD[0]@10
+display tempD[j]@10

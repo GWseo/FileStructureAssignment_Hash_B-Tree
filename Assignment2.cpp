@@ -8,10 +8,9 @@
  *  
  */
 
-/*
- * Block Structure(102 element per block)
+/* * Block Structure(102 element per block)
  * +----------------+-------+---+---+-----------------------+---+
- * | TotalNum(uint) |       | R | R |                       | R |
+ * | TotalNum(uint) |       | R | R |                      | R |
  * +----------------+       | E | E |                       | E |
  * | blockNumber    |       | C | C |                       | C |
  * +----------------|       | O | O |                       | O |
@@ -309,7 +308,7 @@ int main(){
 
     
     // Input data
-   // ifstream fin("Assignment2.inp", ios::in);
+  //  ifstream fin("Assignment2.inp", ios::in);
     ifstream fin("sample2/1.inp",ios::in);
     // for ESPA
     ofstream fout("Assignment2.out", ios::out);
@@ -626,7 +625,7 @@ unsigned branchBucket(unsigned hI){
 #endif
     
     isTableSizeChange=hashTableSize = 1<<hashPrefix; //need to chekc reference count of Bucket
-    tempHashTable = hashTable;
+    //tempHashTable = hashTable;
     if(((BucketAttr*)hashTable[hI])->referenceCount == 1){
 //    if(((BucketAttr*)swapBucket(currentBucketNum,hI))->referenceCount ==1){
         hashPrefix++; 
@@ -642,7 +641,7 @@ unsigned branchBucket(unsigned hI){
     }
     else{
         for (i = 0 ; i < hashTableSize ; i ++){
-            ((BucketAttr*)tempHashTable[i])->referenceCount=0;
+            ((BucketAttr*)hashTable[i])->referenceCount=0;
           // ((BucketAttr*)swapBucket(currentBucketNum,i))->referenceCount=0;
         }
       //  tempHashTable = (hashTableData*)malloc(sizeof(hashTableData*)*hashTableSize);
@@ -657,6 +656,7 @@ unsigned branchBucket(unsigned hI){
 #endif
 
     free(hashTable);
+    hashTable = NULL;
  
     b_New = (Bucket*)malloc(sizeof(Bucket)); 
     memset(b_New, 0x00, sizeof(Bucket));
@@ -838,7 +838,7 @@ unsigned insertHash(char* name, unsigned ID, float score, char* dept){
         return blockNumber;
 }
 unsigned insertRecord(char* name, unsigned ID, float score, char* dept){
-         unsigned blockNumber = 0;
+    unsigned blockNumber = 0;
          // add code heres
         
 #ifdef DEBUGHIGH
@@ -846,22 +846,23 @@ unsigned insertRecord(char* name, unsigned ID, float score, char* dept){
     printf("name: %s, ID : %u, score : %f, dept : %s\n",name,ID, score,dept);
 #endif
     //insert Hash
-        if( (blockNumber = insertHash(name, ID, score, dept))==-1){
-            printf("Error!!\n");
-        }
+    if( (blockNumber = insertHash(name, ID, score, dept))==-1){
+        printf("Error!!\n");
+    }
 #ifdef DEBUGHIGH
-        printf("insert Record --- return b#: %u, currentBucket:%p \n",blockNumber,currentBucket);
+    printf("insert Record --- return b#: %u, currentBucket:%p \n",blockNumber,currentBucket);
 #endif
 //insert btreeNode
 
         //currentNode = rootTree;
-        memset(currentNode,0x00,BLOCKSIZE);
-        free(currentNode);
-        currentNode = (btreeNode*)malloc(BLOCKSIZE);
-        memcpy(currentNode,rootTree,BLOCKSIZE);
-        currentNodeNum = rootTree->header.nodeNum;
-        insertNode(blockNumber,score,0);
-        return blockNumber;
+    memset(currentNode,0x00,BLOCKSIZE);
+    free(currentNode);
+    currentNode = NULL;
+    currentNode = (btreeNode*)malloc(BLOCKSIZE);
+    memcpy(currentNode,rootTree,BLOCKSIZE);
+    currentNodeNum = rootTree->header.nodeNum;
+    insertNode(blockNumber,score,0);
+    return blockNumber;
 }
 void outputTest(){
     int elementCount;
@@ -901,8 +902,9 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                     spliteNode(blockNumber,sc,currentD);
                     if(currentNode  != NULL){
                         nodeWrite(currentNode->header.nodeNum, currentNode);
-                        memset(currentNode,0x00,BLOCKSIZE);
+                  //      memset(currentNode,0x00,BLOCKSIZE);
                         free(currentNode);
+                        currentNode = NULL;
                     }
                     currentNode = (btreeNode*)nodeRead(rootTree->header.nodeNum);
                     currentNodeNum = rootTree->header.nodeNum;
@@ -914,10 +916,10 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                 if( currentNodeN != currentNode->header.nodeNum){
                     nodeWrite(currentNode->header.nodeNum, currentNode);
                     if(currentNode != NULL){
-                        memset(currentNode,0x00,BLOCKSIZE);
+                 //       memset(currentNode,0x00,BLOCKSIZE);
                         free(currentNode);
+                        currentNode=NULL;
                     }
-                    currentNode=NULL;
                     currentNode = (btreeNode*)nodeRead(tempData.blockNumber);
                     currentNodeNum = (currentNode)->header.nodeNum;
                 }
@@ -932,10 +934,10 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
                 //swap currentNode
                 nodeWrite(currentNode->header.nodeNum, currentNode);
                 if(currentNode != NULL){
-                    memset(currentNode,0x00,BLOCKSIZE);
+                //    memset(currentNode,0x00,BLOCKSIZE);
                     free(currentNode);
+                    currentNode= NULL;
                 }
-                currentNode=NULL;
                 currentNode = (btreeNode*)nodeRead(tempData.blockNumber);
                 currentNodeNum = (currentNode)->header.nodeNum;
                 
@@ -953,8 +955,9 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
             unsigned nextNode = ((btreeLeaf*)currentNode)->nextLeafNum;
             nodeWrite(currentNodeNum,currentNode);
             if(currentNode != NULL){
-                memset(currentNode,0x00,BLOCKSIZE);
+               // memset(currentNode,0x00,BLOCKSIZE);
                 free(currentNode);
+                currentNode=NULL;
             }
             currentNode = (btreeNode*)nodeRead(nextNode);
             currentNodeNum = nextNode;
@@ -965,7 +968,7 @@ unsigned insertNode(unsigned blockNumber, float score,unsigned currentD){
     } 
     //
     nodeWrite(currentNode->header.nodeNum,currentNode);
-    memset(currentNode,0x00,BLOCKSIZE);
+  //  memset(currentNode,0x00,BLOCKSIZE);
     free(currentNode);
     currentNode=NULL;
     currentNode = (btreeNode*)nodeRead(currentNodeN);
@@ -996,10 +999,10 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
     printf("blockNumber : %u, score: %f, currentD: %u, currentNode: %u\n",blockNumber,score,currentD, currentNode->header.nodeNum);
 #endif
     if(currentNode != NULL){
-        memset(currentNode,0x00,BLOCKSIZE);
+   //     memset(currentNode,0x00,BLOCKSIZE);
         free(currentNode);
+        currentNode=NULL;
     }
-    currentNode=NULL;
     if(isRoot){
        newParentNode = (btreeNode*)malloc(sizeof(btreeNode));
         memset(newParentNode->Data,0xFF,MAXNODEDATA*sizeof(btreeData));
@@ -1044,10 +1047,10 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
             nodeWrite(currentNodeNum,currentNode);
             //free(newParentNode);
             if(currentNode != NULL){
-                memset(currentNode,0x00,BLOCKSIZE);
+    //            memset(currentNode,0x00,BLOCKSIZE);
                 free(currentNode);
+                currentNode=NULL;
             }
-            currentNode=NULL;
             newParentNode = (btreeNode*)nodeRead(parentNodeNum);
             currentNode = newParentNode;
             parentNodeNum = currentNodeNum = newParentNode->header.nodeNum;
@@ -1109,6 +1112,8 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
         newLeftLeaf->header.parentNum = parentNodeNum;
         nodeWrite(newLeftLeaf->header.leafNum,newLeftLeaf);
         free(newRightLeaf);
+        newRightLeaf = NULL;
+
         currentNode = (btreeNode*)newLeftLeaf;
         //memcpy(currentNode,newLeftLeaf,BLOCKSIZE);
     //    free(newLeftLeaf);
@@ -1148,6 +1153,7 @@ unsigned spliteNode(unsigned blockNumber, float score,unsigned currentD){
 //        free(newLeftNode);
     }
     free(newParentNode);
+    newParentNode = NULL;
 
 }
 
@@ -1217,6 +1223,7 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
         if (i == loopRange){
             memset(currentNode,0x00,BLOCKSIZE);
             free(currentNode);
+            currentNode = NULL;
             currentNode = (btreeNode*)nodeRead(currentData->blockNumber);
             tillFound=btreeSearch(lower,upper,tillFound);
         }
@@ -1227,3 +1234,7 @@ unsigned btreeSearch(float lower,float upper, unsigned till){
 #endif
     return tillFound;
 }
+
+
+
+
